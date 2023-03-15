@@ -1,7 +1,10 @@
 package server;
 
 import javafx.util.Pair;
+import server.models.Course;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -9,6 +12,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 
 public class Server {
 
@@ -84,15 +89,32 @@ public class Server {
     }
 
     /**
-     Lire un fichier texte contenant des informations sur les cours et les transofmer en liste d'objets 'Course'.
+     Lire un fichier texte contenant des informations sur les cours et les transformer en liste d'objets 'Course'.
      La méthode filtre les cours par la session spécifiée en argument.
      Ensuite, elle renvoie la liste des cours pour une session au client en utilisant l'objet 'objectOutputStream'.
      @param arg la session pour laquelle on veut récupérer la liste des cours
      @throws Exception si une erreur se produit lors de la lecture du fichier ou de l'écriture de l'objet dans le flux
      */
     public void handleLoadCourses(String arg) {
-        // TODO: implémenter cette méthode
-        
+        // la liste a retourner avec le objectOutputStream.
+        List<Course> courses = new ArrayList<>();
+        // lecture et creation de la list de cours en fonction de la session.
+        try {
+            File file = new File("./data/cours.txt");
+            Scanner scanner =  new Scanner(file);
+            while(scanner.hasNextLine()){
+                String[] tab = scanner.nextLine().split("\t");
+                if(tab[tab.length].equals(arg)){
+                    courses.add(new Course(tab[0], tab[1],tab[2]));
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // passage de la liste au objectOutputStream.
+
     }
 
     /**
@@ -101,6 +123,8 @@ public class Server {
      @throws Exception si une erreur se produit lors de la lecture de l'objet, l'écriture dans un fichier ou dans le flux de sortie.
      */
     public void handleRegistration() {
+        
+       
         // TODO: implémenter cette méthode
     }
 }
