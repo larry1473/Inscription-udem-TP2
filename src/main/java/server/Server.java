@@ -3,8 +3,9 @@ package server;
 import javafx.util.Pair;
 import server.models.Course;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -13,7 +14,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class Server {
 
@@ -82,7 +82,7 @@ public class Server {
 
     public void handleEvents(String cmd, String arg) {
         if (cmd.equals(REGISTER_COMMAND)) {
-            handleRegistration();
+                handleRegistration();   
         } else if (cmd.equals(LOAD_COMMAND)) {
             handleLoadCourses(arg);
         }
@@ -100,32 +100,55 @@ public class Server {
         List<Course> courses = new ArrayList<>();
         // lecture et creation de la list de cours en fonction de la session.
         try {
-            File file = new File("./data/cours.txt");
-            Scanner scanner =  new Scanner(file);
-            while(scanner.hasNextLine()){
-                String[] tab = scanner.nextLine().split("\t");
-                if(tab[tab.length].equals(arg)){
-                    courses.add(new Course(tab[0], tab[1],tab[2]));
+            BufferedReader br = new BufferedReader(new FileReader(new File("src/main/java/server/data/cours.txt")));
+            String line;
+             while((line = br.readLine()) != null){
+                 String[] tab = line.split("\t");
+                 if(tab[tab.length-1].equals("Hiver")){
+                     courses.add(new Course(tab[0], tab[1], tab[2]));
+                     
                 }
+                 
             }
-
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+             
+ 
+         } catch (IOException e) {
+             // TODO Auto-generated catch block
+             System.out.println("le fichier n'as pas ete trouve");
+             //e.printStackTrace();
+         }
         // passage de la liste au objectOutputStream.
+        try {
+            objectOutputStream = new ObjectOutputStream(objectOutputStream);
+            objectOutputStream.writeObject(courses);
+            objectOutputStream.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            System.out.println("une erreur cest produit en ecrivant l'objet");
+            //e.printStackTrace();
+        }
 
     }
 
     /**
      Récupérer l'objet 'RegistrationForm' envoyé par le client en utilisant 'objectInputStream', l'enregistrer dans un fichier texte
      et renvoyer un message de confirmation au client.
+     * @throws IOException
      @throws Exception si une erreur se produit lors de la lecture de l'objet, l'écriture dans un fichier ou dans le flux de sortie.
      */
-    public void handleRegistration() {
-        
+    public void handleRegistration() throws IOException {
+       // objectInputStream = new ObjectInputStream(objectInputStream);
+       // try {
+       //     objectInputStream.readObject();
+       //     objectInputStream.
+       // } catch (ClassNotFoundException e) {
+       //     // TODO Auto-generated catch block
+       //     e.printStackTrace();
+       // }
        
         // TODO: implémenter cette méthode
     }
+
+    
 }
 
