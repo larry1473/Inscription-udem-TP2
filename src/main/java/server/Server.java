@@ -9,11 +9,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+
 
 public class Server {
 
@@ -49,6 +52,7 @@ public class Server {
                 objectInputStream = new ObjectInputStream(client.getInputStream());
                 objectOutputStream = new ObjectOutputStream(client.getOutputStream());
                 listen();
+                System.out.print("not Listening");
                 disconnect();
                 System.out.println("Client déconnecté!");
             } catch (Exception e) {
@@ -82,7 +86,13 @@ public class Server {
 
     public void handleEvents(String cmd, String arg) {
         if (cmd.equals(REGISTER_COMMAND)) {
-                handleRegistration();   
+                try {
+                    handleRegistration();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    System.out.println("unhandle Registration");
+                    e.printStackTrace();
+                }   
         } else if (cmd.equals(LOAD_COMMAND)) {
             handleLoadCourses(arg);
         }
@@ -103,13 +113,15 @@ public class Server {
             BufferedReader br = new BufferedReader(new FileReader(new File("src/main/java/server/data/cours.txt")));
             String line;
              while((line = br.readLine()) != null){
+                System.out.println("in");
                  String[] tab = line.split("\t");
-                 if(tab[tab.length-1].equals("Hiver")){
+                 if(tab[tab.length-1].equals(arg)){
                      courses.add(new Course(tab[0], tab[1], tab[2]));
                      
                 }
-                 
+                
             }
+            br.close();
              
  
          } catch (IOException e) {
@@ -119,13 +131,14 @@ public class Server {
          }
         // passage de la liste au objectOutputStream.
         try {
-            objectOutputStream = new ObjectOutputStream(objectOutputStream);
+            
+            System.out.println(courses.toString());
             objectOutputStream.writeObject(courses);
             objectOutputStream.close();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             System.out.println("une erreur cest produit en ecrivant l'objet");
-            //e.printStackTrace();
+            e.printStackTrace();
         }
 
     }
@@ -149,6 +162,9 @@ public class Server {
         // TODO: implémenter cette méthode
     }
 
+  
+
+   
     
 }
 

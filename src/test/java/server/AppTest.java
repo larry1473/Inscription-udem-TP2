@@ -2,13 +2,17 @@ package server;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
 import org.junit.Test;
+
+import client.Client;
 
 /**
  * Unit test for simple App.
  */
-public class AppTest 
-{
+public class AppTest {
+
     /**
      * Rigorous Test :-)
      */
@@ -17,4 +21,6 @@ public class AppTest
     {
         assertTrue( true );
     }
+
+   
 }
