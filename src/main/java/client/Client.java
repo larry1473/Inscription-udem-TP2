@@ -20,9 +20,6 @@ public class Client {
     public Client(Socket socket){
         
         Client.socket = socket;
-        
-        
-       
     }
 
  

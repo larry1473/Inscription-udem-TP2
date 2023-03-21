@@ -17,7 +17,11 @@ import java.util.Arrays;
 import java.util.List;
 
 
-
+/**
+ * Cette classe a pour role de faire office de serveur.
+ * Donc permettant la gestion des cours et des inscriptions.
+ *
+ */
 public class Server {
 
     public final static String REGISTER_COMMAND = "INSCRIRE";
@@ -34,16 +38,32 @@ public class Server {
         this.addEventHandler(this::handleEvents);
     }
 
+    /**
+     * 
+     * @param h
+     */
     public void addEventHandler(EventHandler h) {
         this.handlers.add(h);
     }
 
+    /**
+     * 
+     * @return
+     */
     private void alertHandlers(String cmd, String arg) {
         for (EventHandler h : this.handlers) {
             h.handle(cmd, arg);
         }
     }
 
+    /**
+     * Cette méthode permet de lancer le serveur.
+     * Elle permet au client de ce connecter au serveur, et ecoute les eventuels requete du client.
+     * si un requete est emisse par le client elle effectue ce que le client demande.
+     * Les requetes eventuels pouvant emit par le clients sont chargés, pour charger la liste des cours en fonction
+     * d'une session, et les envoyer au client et aussi l'inscription d'un etudiant a une session.
+     * @throws IOException une erreur s'est produite si les streams sont indisponibles.
+     */
     public void run() {
         while (true) {
             try {
@@ -61,6 +81,11 @@ public class Server {
         }
     }
 
+    /**
+     * 
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public void listen() throws IOException, ClassNotFoundException {
         String line;
         if ((line = this.objectInputStream.readObject().toString()) != null) {
@@ -71,6 +96,11 @@ public class Server {
         }
     }
 
+    /**
+     * 
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public Pair<String, String> processCommandLine(String line) {
         String[] parts = line.split(" ");
         String cmd = parts[0];
@@ -78,6 +108,11 @@ public class Server {
         return new Pair<>(cmd, args);
     }
 
+    /**
+     * 
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public void disconnect() throws IOException {
         objectOutputStream.close();
         objectInputStream.close();
