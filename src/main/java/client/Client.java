@@ -38,8 +38,14 @@ public class Client {
             // Reception de la liste du serveur.
             objectInputStream = new ObjectInputStream(socket.getInputStream());
             if(objectInputStream != null){
+                int[] tab = {1};
                 ArrayList<Course> courses = (ArrayList<Course>) objectInputStream.readObject();
-                courses.forEach(System.out::println);
+                courses.forEach(obj ->{
+                    
+                    System.out.println(tab[0]++ + ". "  + obj.getCode() + " " + obj.getName());
+                    
+
+                });
             }
             
         } catch (IOException | ClassNotFoundException  e) {
