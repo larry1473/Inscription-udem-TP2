@@ -39,16 +39,17 @@ public class Server {
     }
 
     /**
-     * 
-     * @param h
+     * Cette methode prend en parametre un objet de type EventHandler qui sera ajouté à la liste
+     * @param h une request de type EventHandler
      */
     public void addEventHandler(EventHandler h) {
         this.handlers.add(h);
     }
 
     /**
-     * 
-     * @return
+     * cette methode premette d'envoyer des alert lorsqu'une requête est envoyée par le client.
+     * @param cmd la commandes a executer par le serveur
+     * @param arg la session voulue par le client.
      */
     private void alertHandlers(String cmd, String arg) {
         for (EventHandler h : this.handlers) {
@@ -82,9 +83,10 @@ public class Server {
     }
 
     /**
-     * 
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * Cette permet d'ecouter les requete emits par le client au serveur.
+     * Apres l'ecoute de la requete elle appelle les methodes neccesaires pour gerer les requetes.
+     * @throws IOException cette erreur s'est produite si aucuns object n'est disposible sur le stream.
+     * @throws ClassNotFoundException cette erreur s'est produite si la classe voulue n'existe pas.
      */
     public void listen() throws IOException, ClassNotFoundException {
         String line;
@@ -97,9 +99,9 @@ public class Server {
     }
 
     /**
-     * 
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * Cette methode prend une chaine de caratere et a divise dans la forme appropriate 
+     * et la retourne dans un HashMap.
+     * @return retourne un HashMap contenant la chaine de caratere et la valeur de la
      */
     public Pair<String, String> processCommandLine(String line) {
         String[] parts = line.split(" ");
@@ -109,9 +111,8 @@ public class Server {
     }
 
     /**
-     * 
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * Cette methode gere la deconnexion du client et des stream entrant et sortant.
+     * @throws IOException Gerer une erreur s'est produite si les streams sont indisponibles.
      */
     public void disconnect() throws IOException {
         objectOutputStream.close();
@@ -119,6 +120,13 @@ public class Server {
         client.close();
     }
 
+    /**
+     * * Cette methode prend en parametre des chaine de caractere et permet de gerer les requete envoyer
+     * par le client, soit les inscription d'un etudiant a une session ou encore pour ou encore charger la liste des cours.
+     * 
+     * @param cmd la commandes a executer par le serveur
+     * @param arg la session voulue par le client.
+     */
     public void handleEvents(String cmd, String arg) {
         if (cmd.equals(REGISTER_COMMAND)) {
                 try {
