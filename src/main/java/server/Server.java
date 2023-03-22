@@ -193,21 +193,41 @@ public class Server {
      @throws Exception si une erreur se produit lors de la lecture de l'objet, l'écriture dans un fichier ou dans le flux de sortie.
      */
     public void handleRegistration() throws IOException {
-       // objectInputStream = new ObjectInputStream(objectInputStream);
-       // try {
-       //     objectInputStream.readObject();
-       //     objectInputStream.
-       // } catch (ClassNotFoundException e) {
-       //     // TODO Auto-generated catch block
-       //     e.printStackTrace();
-       // }
        
-        // TODO: implémenter cette méthode
+        try {
+            // Créer une connexion avec le socket
+            Socket socket = new Socket("localhost", 1234);
+            
+            // Créer un flux d'entrée pour lire les objets depuis le socket
+            ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
+            
+            // Lire l'objet RegistrationForm du flux d'entrée
+            handleRegistration form = (handleRegistration) inputStream.readObject();
+            
+            // Créer un flux de sortie pour écrire l'objet dans le fichier inscription.txt
+            BufferedWriter writer = new BufferedWriter(new FileWriter("inscription.txt"));
+            
+            // Écrire l'objet RegistrationForm dans le fichier selon le format spécifié
+            this.prenom = prenom;
+            this.nom = nom;
+            this.email = email;
+            this.matricule = matricule;
+            this.course = course;
+        }
+            
+            // Fermer les flux et la connexion
+            writer.close();
+            inputStream.close();
+            socket.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
+
+    
 
   
 
    
     
-}
 
