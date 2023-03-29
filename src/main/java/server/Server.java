@@ -2,14 +2,17 @@ package server;
 
 import javafx.util.Pair;
 import server.models.Course;
+import server.models.RegistrationForm;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -193,38 +196,40 @@ public class Server {
      @throws Exception si une erreur se produit lors de la lecture de l'objet, l'écriture dans un fichier ou dans le flux de sortie.
      */
     public void handleRegistration() throws IOException {
-       
+        RegistrationForm registrationForm;
         try {
-            // Créer une connexion avec le socket
-            Socket socket = new Socket("localhost", 1234);
-            
-            // Créer un flux d'entrée pour lire les objets depuis le socket
-            ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
-            
-            // Lire l'objet RegistrationForm du flux d'entrée
-            handleRegistration form = (handleRegistration) inputStream.readObject();
-            
-            // Créer un flux de sortie pour écrire l'objet dans le fichier inscription.txt
-            BufferedWriter writer = new BufferedWriter(new FileWriter("inscription.txt"));
-            
-            // Écrire l'objet RegistrationForm dans le fichier selon le format spécifié
-            this.prenom = prenom;
-            this.nom = nom;
-            this.email = email;
-            this.matricule = matricule;
-            this.course = course;
-        }
-            
-            // Fermer les flux et la connexion
-            writer.close();
-            inputStream.close();
-            socket.close();
-        } catch (IOException | ClassNotFoundException e) {
+            registrationForm = (RegistrationForm)objectInputStream.readObject();
+            PrintWriter fich = new PrintWriter(new BufferedWriter(new FileWriter( "src/main/java/server/data/inscription.txt", true))); //true c'est elle qui permet d'écrire à la suite des donnée enregistrer et non de les remplacé
+            fich.println(registrationForm.toString());
+            fich.close();
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    
     }
 
+    public static void main(String[] args) {
+        try {
+            RegistrationForm rf = new RegistrationForm ("t", "g" , "reineguinguiere@yahoo.fr", "202312", new Course ("Prog1" , "IFT1015", "ete") );
+            PrintWriter fich = new PrintWriter(new BufferedWriter(new FileWriter( "src/main/java/server/data/inscription.txt", true))); //true c'est elle qui permet d'écrire à la suite des donnée enregistrer et non de les remplacé
+            fich.println("");
+            fich.println(rf.toString() );
+
+            fich.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+            
+        
+        }
+      }
+
     
+    
+    // Test push
+
 
   
 
