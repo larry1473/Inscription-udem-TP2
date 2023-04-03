@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
@@ -229,6 +230,34 @@ public class Server {
     
     
     // Test push
+
+
+    public class Client {
+        private static final String SERVER_IP = "127.0.0.1";
+        private static final int SERVER_PORT = 1234;
+
+        public static void main(String[] args) throws IOException {
+            try (Socket socket = new Socket(SERVER_IP, SERVER_PORT);
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+
+                // Arguments pour l'inscription
+                String session_id = "12345";
+                String course_code = "CSE101";
+                String student_id = "123456";
+
+                // Envoi de la requête au serveur
+                out.println("inscription " + session_id + " " + course_code + " " + student_id);
+
+                // Réception de la réponse du serveur
+                String response = in.readLine();
+
+                // Affichage de la réponse du serveur
+                System.out.println(response);
+            }
+        }
+    }
+
 
 
   
