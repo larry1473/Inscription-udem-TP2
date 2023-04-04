@@ -3,7 +3,10 @@ package client;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -19,12 +22,9 @@ public class Client {
     private ObjectOutputStream objectOutputStream;
     private  Socket socket;
     private ArrayList<Course> courses;
-    public final static String  AUTOMNE = "Automne";
-    public final static String  SUMMER  = "Ete";
-    public final static String  WINTER  = "Hiver";
+    public  String ready;
 
     public Client(Socket socket){
-        
         this.socket = socket;
         
     
@@ -55,6 +55,7 @@ public class Client {
 
                 });
             }
+            this.disconnect();
             
         } catch (IOException | ClassNotFoundException  e) {
              System.out.println("probleme avec le serveur or the list of courses was not found");
@@ -112,24 +113,28 @@ public class Client {
             }
             if(courseCode == null ){
                 resMessage = "Veuillez saisir le code du cours: ";
-                System.out.print(resMessage);
+                System.out.print(resMessage);                
                 Scanner s= new Scanner(System.in);
                 courseCode  = s.next();
                 
                
             }
-           
+            
 
         }
         try {
-            
+            objectInputStream = new ObjectInputStream(socket.getInputStream());
+            objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             objectOutputStream.writeObject(Server.REGISTER_COMMAND+ " " +arg);
+            Course cours = new Course(this.getNameFromCourseCode(courseCode),courseCode,this.getSessionFromCourseCode(courseCode));
+            RegistrationForm resg = new RegistrationForm(firstName,lastName,email,matricule,cours);
+            objectOutputStream.writeObject(resg);
 
-            objectOutputStream.writeObject(new RegistrationForm(lastName,lastName,email,matricule,new Course(this.getNameFromCourseCode(courseCode),courseCode,this.getSessionFromCourseCode(courseCode))));
-        } catch (IOException e) {
+        } catch (IOException   e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        this.disconnect();
     }
 
     private  String getNameFromCourseCode(String courseCode){
@@ -151,6 +156,27 @@ public class Client {
         });
         return session[0];
     }
+
+    public ArrayList<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(ArrayList<Course> courses) {
+        this.courses = courses;
+    }
+
+    private void disconnect() {
+        try {
+            objectInputStream.close();
+            objectInputStream.close();
+            socket.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+    }
+
 
 
 

@@ -77,7 +77,6 @@ public class Server {
                 objectInputStream = new ObjectInputStream(client.getInputStream());
                 objectOutputStream = new ObjectOutputStream(client.getOutputStream());
                 listen();
-                System.out.print("not Listening");
                 disconnect();
                 System.out.println("Client déconnecté!");
             } catch (Exception e) {
@@ -197,6 +196,7 @@ public class Server {
      @throws Exception si une erreur se produit lors de la lecture de l'objet, l'écriture dans un fichier ou dans le flux de sortie.
      */
     public void handleRegistration() throws IOException {
+        
         RegistrationForm registrationForm;
         try {
             registrationForm = (RegistrationForm)objectInputStream.readObject();

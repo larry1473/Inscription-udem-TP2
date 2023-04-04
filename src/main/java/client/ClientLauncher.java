@@ -40,6 +40,7 @@ public class ClientLauncher {
         else if(num == 3){
             System.out.println("> Choix: 3 \n les cours offerts pendant la session d'ete sont:");
             client.requestCourses("Ete");
+
             reDisplay("Ete");
         }
 
@@ -62,7 +63,11 @@ public class ClientLauncher {
         else if(num == 2){
             resMessage = "> choix: 2 \n";
             System.out.println(resMessage);
-            client.Register(cmd);
+            Socket soc = new Socket("localhost",1337);
+            Client cl =  new Client(soc);
+            cl.setCourses(client.getCourses());
+            cl.Register(cmd);
+
 
 
         }
