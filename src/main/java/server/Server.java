@@ -210,9 +210,7 @@ public class Server {
     
     }
 
-    void main(String[] args){
-        
-    }
+   
 
 }
 
