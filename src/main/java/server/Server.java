@@ -162,7 +162,7 @@ public class Server {
                 System.out.println("in");
                  String[] tab = line.split("\t");
                  if(tab[tab.length-1].equals(arg)){
-                     courses.add(new Course(tab[0], tab[1], tab[2]));
+                     courses.add(new Course(tab[1], tab[0], tab[2]));
                      
                 }
                 
@@ -203,7 +203,6 @@ public class Server {
             PrintWriter fich = new PrintWriter(new BufferedWriter(new FileWriter( "src/main/java/server/data/inscription.txt", true))); //true c'est elle qui permet d'écrire à la suite des donnée enregistrer et non de les remplacé
             fich.println(registrationForm.getCourse().getSession() + " " + registrationForm.getCourse().getCode() + " "+ registrationForm.getMatricule() + " " + registrationForm.getPrenom() + " " + registrationForm.getNom() + " " + registrationForm.getEmail());
             fich.close();
-            objectOutputStream.writeObject("done");
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
