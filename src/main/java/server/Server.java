@@ -201,7 +201,7 @@ public class Server {
         try {
             registrationForm = (RegistrationForm)objectInputStream.readObject();
             PrintWriter fich = new PrintWriter(new BufferedWriter(new FileWriter( "src/main/java/server/data/inscription.txt", true))); //true c'est elle qui permet d'écrire à la suite des donnée enregistrer et non de les remplacé
-            fich.println(registrationForm.toString());
+            fich.println(registrationForm.getCourse().getSession() + " " + registrationForm.getCourse().getCode() + " "+ registrationForm.getMatricule() + " " + registrationForm.getPrenom() + " " + registrationForm.getNom() + " " + registrationForm.getEmail());
             fich.close();
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
@@ -210,53 +210,14 @@ public class Server {
     
     }
 
-    public static void main(String[] args) {
-        try {
-            RegistrationForm rf = new RegistrationForm ("t", "g" , "reineguinguiere@yahoo.fr", "202312", new Course ("Prog1" , "IFT1015", "ete") );
-            PrintWriter fich = new PrintWriter(new BufferedWriter(new FileWriter( "src/main/java/server/data/inscription.txt", true))); //true c'est elle qui permet d'écrire à la suite des donnée enregistrer et non de les remplacé
-            fich.println("");
-            fich.println(rf.toString() );
-
-            fich.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-            
-        
-        }
-      }
+}
 
     
+
+
+
+      
     
-    // Test push
-
-
-    public class Client {
-        private static final String SERVER_IP = "127.0.0.1";
-        private static final int SERVER_PORT = 1234;
-
-        public static void main(String[] args) throws IOException {
-            try (Socket socket = new Socket(SERVER_IP, SERVER_PORT);
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-
-                // Arguments pour l'inscription
-                String session_id = "12345";
-                String course_code = "CSE101";
-                String student_id = "123456";
-
-                // Envoi de la requête au serveur
-                out.println("inscription " + session_id + " " + course_code + " " + student_id);
-
-                // Réception de la réponse du serveur
-                String response = in.readLine();
-
-                // Affichage de la réponse du serveur
-                System.out.println(response);
-            }
-        }
-    }
 
 
 

@@ -1,10 +1,2 @@
-InscriptionForm{prenom='t', nom='Gui', email='reineguinguiere@yahoo.fr', matricule='202312', course='Course{name=Prog1, code=IFT1015, session=ete}'}InscriptionForm{prenom='t', nom='Gui', email='reineguinguiere@yahoo.fr', matricule='202312', course='Course{name=Prog1, code=IFT1015, session=ete}'}
-
-
-InscriptionForm{prenom='t', nom='Gui', email='reineguinguiere@yahoo.fr', matricule='202312', course='Course{name=Prog1, code=IFT1015, session=ete}'}
- 
-InscriptionForm{prenom='t', nom='Gui', email='reineguinguiere@yahoo.fr', matricule='202312', course='Course{name=Prog1, code=IFT1015, session=ete}'}
-
-InscriptionForm{prenom='t', nom='Gui', email='reineguinguiere@yahoo.fr', matricule='202312', course='Course{name=Prog1, code=IFT1015, session=ete}'}
-
-InscriptionForm{prenom='t', nom='g', email='reineguinguiere@yahoo.fr', matricule='202312', course='Course{name=Prog1, code=IFT1015, session=ete}'}
+ete IFT1015 202312 michalis famelis reineguinguiere@yahoo.fr
+ete IFT1015 202312 paptron van ligen reineguinguiere@yahoo.fr
