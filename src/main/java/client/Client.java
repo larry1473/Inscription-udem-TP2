@@ -129,8 +129,10 @@ public class Client {
             Course cours = new Course(this.getNameFromCourseCode(courseCode),courseCode,this.getSessionFromCourseCode(courseCode));
             RegistrationForm resg = new RegistrationForm(firstName,lastName,email,matricule,cours);
             objectOutputStream.writeObject(resg);
+            String recievedMessage = (String) objectInputStream.readObject();
+            
 
-        } catch (IOException   e) {
+        } catch (IOException | ClassNotFoundException   e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
