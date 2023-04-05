@@ -203,6 +203,7 @@ public class Server {
             PrintWriter fich = new PrintWriter(new BufferedWriter(new FileWriter( "src/main/java/server/data/inscription.txt", true))); //true c'est elle qui permet d'écrire à la suite des donnée enregistrer et non de les remplacé
             fich.println(registrationForm.getCourse().getSession() + " " + registrationForm.getCourse().getCode() + " "+ registrationForm.getMatricule() + " " + registrationForm.getPrenom() + " " + registrationForm.getNom() + " " + registrationForm.getEmail());
             fich.close();
+            objectOutputStream.writeObject("the registration was successfully");
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

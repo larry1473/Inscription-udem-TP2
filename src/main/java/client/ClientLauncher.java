@@ -66,7 +66,8 @@ public class ClientLauncher {
             Socket soc = new Socket("localhost",1337);
             Client cl =  new Client(soc);
             cl.setCourses(client.getCourses());
-            cl.Register(cmd);
+            String RegisMsg = cl.Register(cmd);
+            System.out.println(RegisMsg);
 
 
 
@@ -81,8 +82,8 @@ public class ClientLauncher {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.out.println("the server is not running try again later");
+            //e.printStackTrace();
         }
       
      }

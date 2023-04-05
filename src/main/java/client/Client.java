@@ -67,7 +67,7 @@ public class Client {
 
 
 
-    public void Register(String arg) {
+    public String Register(String arg) {
         String firstName = null;
         String lastName = null;
         String email = null;
@@ -123,19 +123,29 @@ public class Client {
 
         }
         try {
-            //objectInputStream = new ObjectInputStream(socket.getInputStream());
+            
             objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             objectOutputStream.writeObject(Server.REGISTER_COMMAND+ " " +arg);
             Course cours = new Course(this.getNameFromCourseCode(courseCode),courseCode,this.getSessionFromCourseCode(courseCode));
             RegistrationForm resg = new RegistrationForm(firstName,lastName,email,matricule,cours);
             objectOutputStream.writeObject(resg);
+            objectInputStream = new ObjectInputStream(socket.getInputStream());
+            this.ready = (String)objectInputStream.readObject();
+            if(ready != null){
+                return "felicitation ! Inscription reussi " + firstName + " au cours de  " + courseCode;
+
+            }
+            else{
+                return " Echec d'Inscription de " + firstName + " au cours de " + courseCode;
+            }
             
 
-        } catch (IOException   e) {
+        } catch (IOException | ClassNotFoundException   e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         this.disconnect();
+        return null;
     }
 
     private  String getNameFromCourseCode(String courseCode){
