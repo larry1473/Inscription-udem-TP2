@@ -123,16 +123,15 @@ public class Client {
 
         }
         try {
-            objectInputStream = new ObjectInputStream(socket.getInputStream());
+            //objectInputStream = new ObjectInputStream(socket.getInputStream());
             objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             objectOutputStream.writeObject(Server.REGISTER_COMMAND+ " " +arg);
             Course cours = new Course(this.getNameFromCourseCode(courseCode),courseCode,this.getSessionFromCourseCode(courseCode));
             RegistrationForm resg = new RegistrationForm(firstName,lastName,email,matricule,cours);
             objectOutputStream.writeObject(resg);
-            String recievedMessage = (String) objectInputStream.readObject();
             
 
-        } catch (IOException | ClassNotFoundException   e) {
+        } catch (IOException   e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -150,6 +149,8 @@ public class Client {
     }
 
     private  String getSessionFromCourseCode(String courseCode){
+
+        
         String[] session = new String[1]; 
         courses.forEach(obj ->{
             if(obj.getCode().toLowerCase().equals(courseCode.toLowerCase())){
@@ -169,8 +170,8 @@ public class Client {
 
     private void disconnect() {
         try {
-            objectInputStream.close();
-            objectInputStream.close();
+            //objectInputStream.close();
+            objectOutputStream.close();
             socket.close();
         } catch (IOException e) {
             // TODO Auto-generated catch block
