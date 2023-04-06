@@ -10,15 +10,21 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -156,7 +162,10 @@ public class Server {
         List<Course> courses = new ArrayList<>();
         // lecture et creation de la list de cours en fonction de la session.
         try {
-            BufferedReader br = new BufferedReader(new FileReader(new File("src/main/java/server/data/cours.txt")));
+            String jarPath = "cours.txt";
+            String appPath = "src/main/java/server/data/cours.txt";
+            File file = new File(appPath);
+            BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
              while((line = br.readLine()) != null){
                 System.out.println("in");
@@ -199,8 +208,11 @@ public class Server {
         
         RegistrationForm registrationForm;
         try {
+            String jarpath = "inscription.txt";
+            String appPath = "src/main/java/server/data/inscription.txt";
             registrationForm = (RegistrationForm)objectInputStream.readObject();
-            PrintWriter fich = new PrintWriter(new BufferedWriter(new FileWriter( "src/main/java/server/data/inscription.txt", true))); //true c'est elle qui permet d'écrire à la suite des donnée enregistrer et non de les remplacé
+            File file = new File(appPath);
+            PrintWriter fich = new PrintWriter(new BufferedWriter(new FileWriter(file , true))); //true c'est elle qui permet d'écrire à la suite des donnée enregistrer et non de les remplacé
             fich.println(registrationForm.getCourse().getSession() + " " + registrationForm.getCourse().getCode() + " "+ registrationForm.getMatricule() + " " + registrationForm.getPrenom() + " " + registrationForm.getNom() + " " + registrationForm.getEmail());
             fich.close();
             objectOutputStream.writeObject("the registration was successfully");
@@ -211,7 +223,7 @@ public class Server {
     
     }
 
-    public void main(String[] args) throws Exception {}
+
 
    
 
