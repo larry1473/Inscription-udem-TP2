@@ -32,5 +32,9 @@ public class App{
         Application.launch(Gui.class);
 
     }
+
+    public static void test(){
+        
+    }
     
 }
