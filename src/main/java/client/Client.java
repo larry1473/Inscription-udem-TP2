@@ -3,10 +3,7 @@ package client;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -14,7 +11,7 @@ import server.Server;
 import server.models.Course;
 import server.models.RegistrationForm;
 /**
- * @author
+ * @author Larry fotso, Reine wendkuni
  */
 public class Client {
     
@@ -34,8 +31,8 @@ public class Client {
 
     
     /**
-     * Cette mmethode est utilisée par le client pour demander au serveur la liste des courses disponibles
-     * @param arg the session 
+     * the method sends a request to the server to get a list of courses of a specific session.
+     * @param arg the session we want to get a list of courses
      */
     public void requestCourses(String arg){
         try {
@@ -67,6 +64,11 @@ public class Client {
 
 
 
+    /**
+     * This method send a request to the server to register a student.
+     * @param arg the session we want our student.
+     * @return return a message to say if the student was successfully registered or not.
+     */
     public String Register(String arg) {
         String firstName = null;
         String lastName = null;
@@ -148,6 +150,11 @@ public class Client {
         return null;
     }
 
+    /**
+     * this gets a course code and returns a name  if present in the list of code 
+     * @param courseCode the course code we want to check if it exists in the list of course.
+     * @return returns a name if it exists in the list  else null;
+     */
     private  String getNameFromCourseCode(String courseCode){
         String[] name = new String[1]; 
         courses.forEach(obj ->{
@@ -158,6 +165,11 @@ public class Client {
         return name[0];
     }
 
+    /**
+     * this gets a course code and returns an equivalent course code if present in the list of code 
+     * @param courseCode the course code we want to check if it exists in the list of course.
+     * @return course code if it exists in the list of course else it returns null.
+     */
     private  String getSessionFromCourseCode(String courseCode){
 
         
@@ -170,14 +182,25 @@ public class Client {
         return session[0];
     }
 
+    /**
+     * returns a list of courses that
+     * @return return the client's list of courses
+     */
     public ArrayList<Course> getCourses() {
         return courses;
     }
 
+    /**
+     * Gives a list of courses to the client 
+     * @param courses list of courses
+     */
     public void setCourses(ArrayList<Course> courses) {
         this.courses = courses;
     }
 
+    /**
+     * this method close all the streams
+     */
     private void disconnect() {
         try {
             //objectInputStream.close();

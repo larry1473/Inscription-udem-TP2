@@ -1,0 +1,7 @@
+client/ClientLauncher.class
+server/models/Course.class
+server/models/RegistrationForm.class
+client/Client.class
+server/Server.class
+server/EventHandler.class
+server/ServerLauncher.class
