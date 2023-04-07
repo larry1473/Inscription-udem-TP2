@@ -150,6 +150,35 @@ public class Client {
         return null;
     }
 
+    public String Register(String firstName,String lastName,String email,String matricule,String courseCode,String arg){
+        try {
+            
+            objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+            objectOutputStream.writeObject(Server.REGISTER_COMMAND+ " " +arg);
+            Course cours = new Course(this.getNameFromCourseCode(courseCode),courseCode,this.getSessionFromCourseCode(courseCode));
+            RegistrationForm resg = new RegistrationForm(firstName,lastName,email,matricule,cours);
+            objectOutputStream.writeObject(resg);
+            objectInputStream = new ObjectInputStream(socket.getInputStream());
+            this.ready = (String)objectInputStream.readObject();
+            if(ready != null){
+                return "felicitation ! Inscription reussi " + firstName + " au cours de  " + courseCode;
+
+            }
+            else{
+                return " Echec d'Inscription de " + firstName + " au cours de " + courseCode;
+            }
+            
+
+        } catch (IOException | ClassNotFoundException   e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        this.disconnect();
+        return null;
+
+
+    }
+
     /**
      * this gets a course code and returns a name  if present in the list of code 
      * @param courseCode the course code we want to check if it exists in the list of course.
