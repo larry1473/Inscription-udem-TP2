@@ -83,8 +83,9 @@ public class Client {
             if(firstName == null ){
                 resMessage = "Veuillez saisir votre prenom: ";
                 System.out.print(resMessage);
-                Scanner s = new Scanner(System.in);
-                firstName  = s.next();
+                try (Scanner s = new Scanner(System.in)) {
+                    firstName  = s.next();
+                }
                 
                 
                
@@ -92,32 +93,36 @@ public class Client {
             if(lastName == null ){
                 resMessage = "Veuillez saisir votre nom: ";
                 System.out.print(resMessage);
-                Scanner s = new Scanner(System.in);
-                lastName  = s.next();
+                try (Scanner s = new Scanner(System.in)) {
+                    lastName  = s.next();
+                }
                 
                
             }
             if(email == null ){
                 resMessage = "Veuillez saisir votre email: ";
                 System.out.print(resMessage);
-                Scanner s = new Scanner(System.in);
-                email  = s.next();
+                try (Scanner s = new Scanner(System.in)) {
+                    email  = s.next();
+                }
                 
                
             }
             if(matricule == null ){
                 resMessage = "Veuillez saisir votre matricule: ";
                 System.out.print(resMessage);
-                Scanner s = new Scanner(System.in);
-                matricule  = s.next();
+                try (Scanner s = new Scanner(System.in)) {
+                    matricule  = s.next();
+                }
                 
                
             }
             if(courseCode == null ){
                 resMessage = "Veuillez saisir le code du cours: ";
                 System.out.print(resMessage);                
-                Scanner s= new Scanner(System.in);
-                courseCode  = s.next();
+                try (Scanner s = new Scanner(System.in)) {
+                    courseCode  = s.next();
+                }
                 
                
             }
