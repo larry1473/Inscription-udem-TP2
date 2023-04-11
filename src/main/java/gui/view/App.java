@@ -61,7 +61,6 @@ public class App{
             HBox buttonBox = new HBox();
             buttonBox.setPadding(new Insets(5, 0, 10, 0));
             buttonBox.setSpacing(70);
-            buttonBox.setPadding(new Insets(10, 0, 5, 20));
             // adding elements to the left box
             Label leftBoxLabel = new Label("Liste des cours");
             leftBoxLabel.setPadding(new Insets(15, 0, 5, 140));
@@ -73,11 +72,9 @@ public class App{
             TableColumn cours = new TableColumn("Cours");
             session = new ChoiceBox();
             session.getItems().addAll("Hiver", "Ete","Automne");
-            
-
             charger = new Button ("Charger");  
+            charger.setPadding(new Insets(0, 0, 10, 25));
             buttonBox.getChildren().addAll(session,charger);
-            
 
 
 
