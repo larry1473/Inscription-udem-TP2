@@ -1,32 +1,30 @@
 package gui.view;
 
-import com.sun.prism.paint.Color;
+import java.util.ArrayList;
 
+import gui.controller.GuiController;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
-import javafx.scene.layout.BackgroundFill;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
-
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import server.models.Course;
 
 
 
@@ -35,6 +33,7 @@ import javafx.stage.Stage;
 public class App{
 
     public static class Gui extends Application{
+        GuiController guiController = new GuiController();
         Button envoyer;
         Button charger;
         TableView table;
@@ -48,11 +47,10 @@ public class App{
 
            
         @Override
+       
         public void start(Stage window) throws Exception {
 
 
-            //Parent root;
-            // Scene scene = new Scene ( root, 1200 ,800);
             window.setTitle("Inscription UdeM");
            
 
@@ -60,7 +58,6 @@ public class App{
             VBox leftBox = new VBox();
             HBox buttonBox = new HBox();
             buttonBox.setPadding(new Insets(5, 0, 10, 0));
-            buttonBox.setSpacing(70);
             // adding elements to the left box
             Label leftBoxLabel = new Label("Liste des cours");
             leftBoxLabel.setPadding(new Insets(15, 0, 5, 140));
@@ -68,13 +65,17 @@ public class App{
 
             table = new TableView();
             table.setEditable(false);
-            TableColumn code = new TableColumn("Code");
-            TableColumn cours = new TableColumn("Cours");
+            TableColumn<String,Course> code = new TableColumn("Code");
+            code.setCellValueFactory(new PropertyValueFactory<>("code"));
+            TableColumn<String,Course> cours = new TableColumn("Cours");
+            cours.setCellValueFactory(new PropertyValueFactory<>("name"));
             session = new ChoiceBox();
             session.getItems().addAll("Hiver", "Ete","Automne");
+
             charger = new Button ("Charger");  
-            charger.setPadding(new Insets(0, 0, 10, 25));
             buttonBox.getChildren().addAll(session,charger);
+            buttonBox.setMargin(session, new Insets(10, 40, 10, 40));
+            buttonBox.setMargin(charger, new Insets(10, 0, 10, 60));
 
 
 
@@ -139,57 +140,144 @@ public class App{
             //root.setStyle("-fx-background-color: Black");
             root.setLeft(leftBox);
             root.setRight(rightBox);
+            //root.setBottom(buttonBox);
             Scene scene = new Scene (root , 800, 400);
            
             //root.getChildren().addAll(leftBox,rightBox);
             window.setScene(scene);
             window.show();
-            /*scene.setFill(Color.web("#FFFFF"));
-            HBox buttonBox = new HBox();
-            Label leftBoxLabel = new Label("Liste des cours");
-            Button lefButton = new Button("Code");
-            Button rightButton = new Button("Cours");
-            TextArea coursesArea = new TextArea();
-            buttonBox.getChildren().addAll(lefButton,rightButton);
-            //coursesArea.getChildrenUnmodifiable().addAll(buttonBox);
-            leftBox.getChildren().addAll(leftBoxLabel,buttonBox,coursesArea);*/
-           
-           
-             // Creation du formulaire  pour inscription UdeM
-
-             
-             //rightBox.setStyle("-fx-background: red");
-             //Label rightBoxLabel = new Label("Formulaire d'inscription");
-             //HBox prenomBox = new HBox ();
-             //HBox nomBox = new HBox();
-             //HBox emailBox = new HBox();
-             //HBox matriculeBox = new HBox();
-             //Label labelPrenom = new Label("Prénom");
-             //TextField textFieldPrenom = new TextField();
-             //Label labelNom = new Label ("Nom");
-             //TextField textFieldNom = new TextField();
-             //Label labelEmail= new Label("Email");
-             //TextField textFieldEmail = new TextField();
-             //Label labelMatricule = new Label ("Maticule");
-             //TextField textFieldMAtricule = new TextField();
-             //Button FormButton = new Button("Envoyer");
-             //prenomBox.getChildren().addAll(labelPrenom,textFieldPrenom);
-             //nomBox.getChildren().addAll(labelNom,textFieldNom);
-             //emailBox.getChildren().addAll(labelEmail,textFieldEmail);
-             //matriculeBox.getChildren().addAll(labelMatricule,textFieldMAtricule);
-             //rightBox.getChildren().addAll(rightBoxLabel, prenomBox, nomBox,emailBox,matriculeBox,FormButton);
 
 
-             //rightBox.getChildren().addAll(null)
-
-
-           
-           
-
-            //borderPaneRoot.setRight(rightBox);
+            addButtonLoadListener(session, charger, guiController);
+            addSendButtonListener(lastNameTextField, firstNameTextField, emailTextField, matriculeTextField, guiController, envoyer, table, session);
+         
         }
 
+    /**
+     *
+     * @param firsTextField
+     * @param lastTextField
+     * @param emailTextfield
+     * @param matriculeTextField
+     * @param guiController
+     * @param sendButton
+     * @param table
+     * @param session
+     */   
+    private void addSendButtonListener(TextField firsTextField,TextField lastTextField,TextField emailTextfield, TextField matriculeTextField,GuiController guiController,Button sendButton,TableView table,ChoiceBox session){
+
+        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+           
+            public void handle(ActionEvent event) {
+               Course cours = (Course)table.getSelectionModel().getSelectedItem();
+               if(firsTextField.getText().equals("") && lastNameTextField.getText().equals("")  && emailTextField.getText().equals("")  && matriculeTextField.getText().equals("")) {
+                    Alert error = new Alert(AlertType.ERROR);
+                    error.setHeaderText("Informations manquantes");
+                    error.setContentText("Vous n'avez pas fournit vous informations ");
+                    error.showAndWait();
+               }
+               if(cours != null){
+                String courseCode = cours.getCode();
+
+                int flag = guiController.validateEmail(emailTextfield);
+                int matFlag = guiController.validateMatricule(matriculeTextField.getText());
+                if(flag == 1 ){
+                    Alert error = new Alert(AlertType.WARNING);
+                    error.setHeaderText(null);
+                    error.setContentText("le format de l'email est incorrect");
+                    error.showAndWait();
+                }
+                if(matFlag == 1){
+                    Alert error = new Alert(AlertType.WARNING);
+                    error.setHeaderText(null);
+                    error.setContentText("le matricule doit etre compose de 6 chiffres");
+                    error.showAndWait();
+                }
+                if(firsTextField.getText().equals("") && lastNameTextField.getText().equals("")  && emailTextField.getText().equals("")  && matriculeTextField.getText().equals("")) {
+                    Alert error = new Alert(AlertType.ERROR);
+                    error.setHeaderText("Informations manquantes");
+                    error.setContentText("Vous n'avez pas fournit vous informations ");
+                    error.showAndWait();
+                }
+                else{
+
+                    guiController.envoyer(firsTextField.getText(), lastTextField.getText(), emailTextfield.getText(), matriculeTextField.getText(),courseCode, (String)session.getSelectionModel().getSelectedItem());
+                    firsTextField.clear();
+                    lastTextField.clear();
+                    emailTextfield.clear();
+                    matriculeTextField.clear();
+
+                }
+             
+               
+           
+
+               }
+               else{
+
+                Alert error = new Alert(AlertType.ERROR);
+                error.setHeaderText("Erreur non selection");
+                error.setContentText("Vous avez pas selection de cours ");
+                error.showAndWait();
+
+               }
+               
+               
+            }
+
+           
+        };
+        sendButton.setOnAction(event);
+
     }
+    /**
+     * this method adds a click event to a button given as an argument
+     * @param session the choice box containing the different sessions
+     * @param load the button that needs the click event.
+     * @param guiController the model controller
+     */   
+    private void addButtonLoadListener(ChoiceBox session,Button load ,GuiController guiController){
+
+        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent event) {
+                if(session == null){
+                    guiController.charger("Hiver");
+                   
+                }
+                else{
+                   
+                    ArrayList<Course> course = guiController.charger((String)session.getSelectionModel().getSelectedItem());
+                    loadTable(course,table);
+                }
+            }
+
+           
+        };
+
+        load.setOnAction(event);
+
+    }
+    /**
+     * this methode populates a given table view with data from a array list containing courses
+     * @param course the list of courses
+     * @param table the table view to be populated
+     */
+    private void loadTable(ArrayList<Course> course,TableView table) {
+        table.getItems().clear();
+        for (Course c : course) {
+            table.getItems().add(c);
+           
+        }
+
+
+    }
+
+
+    }
+
+
+
+ 
    
 
    
@@ -200,8 +288,10 @@ public class App{
 
     }
 
-    public static void test(){
-       
-    }
+    
+    public void test(){
+
+    }   
+    
    
 }
