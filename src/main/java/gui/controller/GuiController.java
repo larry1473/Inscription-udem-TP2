@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import client.Client;
+import javafx.scene.control.TextField;
 import server.models.Course;
 
 public class GuiController {
@@ -50,6 +51,14 @@ public class GuiController {
 
 
 
+    }
+
+    public int validateEmail(TextField emailTextfield) {
+        return 0;
+    }
+
+    public int validateMatricule(String text) {
+        return 0;
     }
 
     
